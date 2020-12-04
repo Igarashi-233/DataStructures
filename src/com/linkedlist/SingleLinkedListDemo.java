@@ -263,10 +263,10 @@ public class SingleLinkedListDemo {
             if (temp == null) {
                 break;
             }
-            next = temp.next;
-            temp.next = reverseHead.next;
-            reverseHead.next = temp;
-            temp = next;
+            next = temp.next;//先暂时保存当前节点的下一个节点，因为后面需要使用
+            temp.next = reverseHead.next;//将temp的下一个节点指向新的链表的最前端
+            reverseHead.next = temp; //将temp 连接到新的链表上
+            temp = next;//让temp后移
         }
         //将head.next 指向 reverseHead.next , 实现单链表的反转
         head.next = reverseHead.next;
