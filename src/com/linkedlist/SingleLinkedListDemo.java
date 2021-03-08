@@ -1,6 +1,5 @@
 package com.linkedlist;
 
-import java.util.Currency;
 import java.util.Stack;
 
 //定义一个HeroNode  每个HeroNode 对象就是一个节点
@@ -24,12 +23,13 @@ class HeroNode {
                 ", damage=" + damage +
                 '}';
     }
+
 }
 
 //定义SingleLinkedList  管理英雄
 class SingleLinkedList {
     //初始化头节点  不使用
-    private HeroNode head = new HeroNode(0, "", 0);
+    private final HeroNode head = new HeroNode(0, "", 0);
 
     //返回头节点
     public HeroNode getHead() {
@@ -45,11 +45,8 @@ class SingleLinkedList {
         HeroNode temp = head;
 
         //遍历链表 找最后节点
-        while (true) {
+        while (temp.next != null) {
             //找到最后节点
-            if (temp.next == null) {
-                break;
-            }
             //没找到，指针下移
             temp = temp.next;
         }
@@ -159,11 +156,8 @@ class SingleLinkedList {
         }
         //头节点不使用 辅助指针temp
         HeroNode temp = head.next;
-        while (true) {
+        while (temp != null) {
             //是否为链表最后节点
-            if (temp == null) {
-                break;
-            }
             //输出节点信息
             System.out.println(temp);
             //后移temp
@@ -180,6 +174,11 @@ public class SingleLinkedListDemo {
         HeroNode genji = new HeroNode(2, "Genji", 30);
         HeroNode macree = new HeroNode(3, "macree", 140);
         HeroNode dva = new HeroNode(4, "D.va", 40);
+
+        HeroNode igarashi = new HeroNode(1, "igarashi", 600);
+        HeroNode kaori = new HeroNode(6, "kaori", 233);
+        HeroNode kobe = new HeroNode(3, "kobe", 6);
+        HeroNode xiyou = new HeroNode(2, "xiyou", 69);
 
         //创建链表
         SingleLinkedList singleLinkedList = new SingleLinkedList();
@@ -228,7 +227,74 @@ public class SingleLinkedListDemo {
 
         System.out.println("测试逆序打印单链表, 没有改变链表的结构~~");
         reversePrint(singleLinkedList.getHead());
+
+        SingleLinkedList singleLinkedList1 = new SingleLinkedList();
+        singleLinkedList1.addByOrder(igarashi);
+        singleLinkedList1.addByOrder(xiyou);
+        singleLinkedList1.addByOrder(kaori);
+        singleLinkedList1.addByOrder(kobe);
+
+        System.out.println("两个链表原来的情况~~~~");
+        singleLinkedList1.list();
+        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        singleLinkedList.list();
+
+        System.out.println("NOW~~~~\n\n\n");
+
+        HeroNode heroNode1 = new HeroNode(1, "aaa", 100);
+        HeroNode heroNode2 = new HeroNode(2, "bbb", 100);
+        HeroNode heroNode3 = new HeroNode(3, "ccc", 100);
+        HeroNode heroNode4 = new HeroNode(4, "ddd", 100);
+        HeroNode heroNode5 = new HeroNode(5, "eee", 100);
+        HeroNode heroNode6 = new HeroNode(6, "fff", 100);
+        HeroNode heroNode7 = new HeroNode(7, "ggg", 100);
+
+        SingleLinkedList list1 = new SingleLinkedList();
+        SingleLinkedList list2 = new SingleLinkedList();
+
+        list1.addByOrder(heroNode1);
+        list1.addByOrder(heroNode3);
+        list1.addByOrder(heroNode7);
+        list1.addByOrder(heroNode5);
+        list2.addByOrder(heroNode2);
+        list2.addByOrder(heroNode4);
+        list2.addByOrder(heroNode6);
+
+        System.out.println("======================链表一======================");
+        list1.list();
+        System.out.println("======================链表二======================");
+        list2.list();
+
+        System.out.println("=================================================");
+
+        HeroNode newHead = combineList(list1.getHead().next, list2.getHead().next);
+        SingleLinkedList newList = new SingleLinkedList();
+        newList.add(newHead);
+        newList.list();
+
     }
+
+    //合并两个有序的单链表，合并之后的链表依然有序
+    public static HeroNode combineList(HeroNode head1, HeroNode head2) {
+        if (head1 == null && head2 == null)
+            return null;
+
+        if (head1 == null)
+            return head2;
+        if (head2 == null)
+            return head1;
+
+        HeroNode newHead;
+        if (head1.no > head2.no) {
+            newHead = head2;
+            newHead.next = combineList(head1, head2.next);
+        } else {
+            newHead = head1;
+            head1.next = combineList(head1.next, head2);
+        }
+        return newHead;
+    }
+
 
     //可以利用栈这个数据结构，将各个节点压入到栈中，然后利用栈的先进后出的特点，就实现了逆序打印的效果
     public static void reversePrint(HeroNode head) {
@@ -257,7 +323,7 @@ public class SingleLinkedListDemo {
             return;
         }
         HeroNode temp = head.next;
-        HeroNode next = null;
+        HeroNode next;
         HeroNode reverseHead = new HeroNode(0, "", 0);
         for (int i = 0; i <= getLength(head); i++) {
             if (temp == null) {
